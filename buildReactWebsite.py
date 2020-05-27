@@ -14,25 +14,26 @@ import subprocess
 with open('websiteConfig.json', 'r') as myfile:
     data=myfile.read()
 configFile=json.loads(data)
+myfile.close()
 # declaring variables
-productionFile= str(configFile["productionFile"])
-developmentFileCopy=str(configFile["developmentFile"])
-projectLocation=str(configFile["projectLocation"])
+frontendProductionFile= str(configFile["frontendProductionFile"])
+frontendDevelopmentFileCopy=str(configFile["frontendDevelopmentFile"])
+frontendProjectLocation=str(configFile["frontendProjectLocation"])
 
 ############ Step No.1 ############
 
 # Copying the production file
 print("----- Replacing the development file for the production file ---------------")
 
-print("The project's location is %s" % projectLocation)
-print("The production file is %s" % productionFile)
-# replacing the developmentFile
-shutil.copyfile(productionFile,projectLocation+"src/features/common/redux/constantes.js")
+print("The project's location is %s" % frontendProjectLocation)
+print("The production file is %s" % frontendProductionFile)
+# replacing the frontendDevelopmentFile
+shutil.copyfile(frontendProductionFile,frontendProjectLocation+"src/features/common/redux/constantes.js")
 # executing the build command
 
 ############ Step No.2 ############
 print("----- executing the build script ------------")
-bashInstruction = "cd "+projectLocation+" && npm run build "
+bashInstruction = "cd "+frontendProjectLocation+" && npm run build "
 process = subprocess.Popen(bashInstruction, 
                            stdout=subprocess.PIPE, 
                            shell=True)
@@ -41,4 +42,4 @@ for line in process.stdout:
 
 ############ Step No.3 ############
 print("------ Replacing the production file by the development file -------------------")
-shutil.copyfile(developmentFileCopy, projectLocation+"src/features/common/redux/constantes.js")
+shutil.copyfile(frontendDevelopmentFileCopy, frontendProjectLocation+"src/features/common/redux/constantes.js")
