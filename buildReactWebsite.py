@@ -5,9 +5,10 @@ import subprocess
 # The React Project is under Rekit.js framework
 # The algorithm has the following steps:
 # 0- Open the configuration file
-# 1- Replace the development "constants" by the productoin "constants" file
+# 1- Replace the development "constants" by the production "constants" file
 # 2- Run the Rekit's build script to build the website
 # 3- Replace the production "constants"  file by the development "constants" file.
+# 4- Copy the build folder to the out folder
 
 ############ Step No.0  ###########
 
@@ -19,7 +20,7 @@ myfile.close()
 frontendProductionFile= str(configFile["frontendProductionFile"])
 frontendDevelopmentFileCopy=str(configFile["frontendDevelopmentFile"])
 frontendProjectLocation=str(configFile["frontendProjectLocation"])
-
+outputFolder = str(configFile["outputFolder"])
 ############ Step No.1 ############
 
 # Copying the production file
@@ -43,3 +44,13 @@ for line in process.stdout:
 ############ Step No.3 ############
 print("------ Replacing the production file by the development file -------------------")
 shutil.copyfile(frontendDevelopmentFileCopy, frontendProjectLocation+"src/features/common/redux/constantes.js")
+
+
+############ Step No.4 ############
+print("------ Copying the build folder to the output folder -------------------")
+bashInstructions="cp -r "+frontendProjectLocation+"build/"+" "+outputFolder
+process = subprocess.Popen(bashInstructions, 
+                           stdout=subprocess.PIPE, 
+                           shell=True)
+for line in process.stdout:
+    print(line.decode("utf-8"))
